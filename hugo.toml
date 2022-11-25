@@ -1,0 +1,68 @@
+baseURL = "https://guille.github.io/"
+title = "Guillermo Rodríguez"
+theme = "hugo-coder"
+languagecode = "en-uk"
+defaultcontentlanguage = "en"
+
+paginate = 20
+
+[markup.highlight]
+style = "monokai"
+
+[params]
+  author = "Guillermo Rodríguez"
+  info = "Software Engineer"
+  description = "Guillermo Rodríguez's personal website"
+  keywords = "blog,developer,personal"
+  avatarurl = "images/avatar.png"
+
+  faviconSVG = "/img/favicon.svg"
+  favicon_32 = "/img/favicon-32x32.png"
+  favicon_16 = "/img/favicon-16x16.png"
+
+  since = 2024
+
+  colorScheme = "auto"
+  hidecolorschemetoggle = false
+
+  # customCSS = ["css/custom.css"]
+  # customSCSS = ["scss/custom.scss"]
+  # customJS = ["js/custom.js"]
+
+[taxonomies]
+  category = "categories"
+  series = "series"
+  tag = "tags"
+  author = "authors"
+
+# Social links
+[[params.social]]
+  name = "Github"
+  icon = "fa-brands fa-github fa-2x"
+  weight = 1
+  url = "https://github.com/guille/"
+[[params.social]]
+  name = "LinkedIn"
+  icon = "fa-brands fa-linkedin fa-2x"
+  weight = 2
+  url = "https://www.linkedin.com/in/guille-rodriguez/"
+[[params.social]]
+  name = "Resume"
+  icon = "fa-regular fa-file fa-2x"
+  weight = 3
+  url = "/cv.pdf"
+[[params.social]]
+  name = "RSS"
+  icon = "fa-solid fa-rss fa-2x"
+  weight = 4
+  url = "/index.xml"
+
+# Menu links
+[[menu.main]]
+  name = "Blog"
+  weight = 1
+  url  = "posts/"
+[[menu.main]]
+  name = "About"
+  weight = 2
+  url = "about/"
