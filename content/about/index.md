@@ -5,7 +5,7 @@ date = 2024-03-29T02:07:58+01:00
 
 I'm Guillermo[^1], a software engineer currently based in Barcelona.
 
-Some of my core beliefs when it comes to tech;
+Some of my core beliefs when it comes to tech:
 
 - Fundamentals are underrated.
 - Being a good learner may be the most important skill for a software engineer.
