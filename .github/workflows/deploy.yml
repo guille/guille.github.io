@@ -27,6 +27,19 @@ defaults:
     shell: bash
 
 jobs:
+  # Clean old deployments, thanks StackOverflow!
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: 🗑 Delete deployment
+        uses: strumwolf/delete-deployment-environment@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: github-pages
+          onlyRemoveDeployments: true
+
   # Build job
   build:
     runs-on: ubuntu-latest
