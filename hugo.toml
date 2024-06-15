@@ -57,6 +57,9 @@ style = "monokai"
   weight = 4
   url = "/index.xml"
 
+[params.goatCounter]
+  code = "guille"
+
 # Menu links
 [[menu.main]]
   name = "Blog"
