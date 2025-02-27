@@ -4,7 +4,7 @@ theme = "hugo-coder"
 languagecode = "en-uk"
 defaultcontentlanguage = "en"
 
-paginate = 20
+pagination.pagerSize = 20
 
 [markup.highlight]
 style = "monokai"
