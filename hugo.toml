@@ -11,7 +11,7 @@ style = "monokai"
 
 [params]
   author = "Guillermo Rodríguez"
-  info = "Software Engineer"
+  info = "Senior Software Engineer"
   description = "Guillermo Rodríguez's personal website"
   keywords = "blog,developer,personal"
   avatarurl = "images/avatar.png"
