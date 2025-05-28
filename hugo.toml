@@ -69,3 +69,11 @@ style = "monokai"
   name = "About"
   weight = 2
   url = "about/"
+[[menu.main]]
+  name = "TIL"
+  weight = 2
+  url = "til/"
+
+# Needed for TIL
+[markup.goldmark.renderer]
+  unsafe = true

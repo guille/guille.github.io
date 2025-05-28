@@ -1,0 +1,25 @@
+<!-- Ugh -->
+{{ if not (.Page.Scratch.Get "my-css-injected") }}
+  <style>
+    .til-card {
+      width: 100%;
+      border-radius: 1rem;
+      border: 1px solid #eee;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .til-name {
+      margin-top: 0;
+    }
+  </style>
+
+  {{ .Page.Scratch.Set "my-css-injected" true }}
+{{ end }}
+
+<div class="til-card">
+  <h3 class="til-name">{{ .Get "title" }}</h3>
+
+  <div class="stack">
+    {{ .Inner | .Page.RenderString }}
+  </div>
+</div>
