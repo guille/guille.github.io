@@ -11,7 +11,7 @@ externalLink = ""
 
 Every so often I like to ~waste~ spend some time tinkering with my computer's configuration. Part of it is, of course, to make it look nice. There's something satisfying about getting the right colour scheme, a cool-looking prompt, and a custom bar that shows exactly the information you want where you want it.
 
-![A screenshot of my desktop](/desktop.png)
+![A screenshot of my desktop](/images/desktop.png)
 
 But I'd argue there's also some valuable lessons to be learned from them. I've said [before](/about) that fundamentals are very important, and that includes knowing your operating system and your shell. Those are the sort of skills that this sort of tinkering forces you to learn.
 
