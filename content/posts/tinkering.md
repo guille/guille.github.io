@@ -35,6 +35,7 @@ Even then, I did leave with some minor pain points, some of which I hope will be
 - I can only screen share an entire monitor. I think there are ways around it by using virtual displays but that seems a bit too involved. It seems the [feature has been implemented](https://github.com/emersion/xdg-desktop-portal-wlr/issues/107), so it's just a matter of waiting for the next release. Thankfully I don't need this feature on my Linux box for now so I'm fine waiting.
 - I used to have a progress bar on my [polybar](https://github.com/polybar/polybar/) to show the currently-playing song. As part of the migration to [waybar](https://github.com/Alexays/Waybar/) I had to get rid of it. Waybar is slightly inferior to polybar as a 1:1 replacement but it does the job.
 - The only feature I'm missing when migrating from [i3](https://i3wm.org/) to [sway](https://github.com/swaywm/sway/) is layouts. I liked i3 to prepare my environment in the layout I wanted right after booting, and sway doesn't offer that. There are some [workarounds](https://github.com/swaywm/sway/issues/1005) but none too convincing, so I have a very hacky string of `swaymsg` statements that works most of the time.
+- I haven't found a good replacements for GUI apps that you previously had to run in sudo (or gksudo) like gparted or gsmartcontrol. I guess I'll need to learn the CLI versions?
 
 
 ## Dotfile wrangling
