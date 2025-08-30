@@ -1,8 +1,8 @@
-+++ 
++++
 date = 2024-03-29T12:47:32+01:00
 title = "Link roundup (I)"
 description = "Roundup of interesting links, usually but not exclusively tech related"
-slug = ""
+url = "posts/link-roundup-1"
 authors = []
 tags = []
 categories = ["Link roundup"]
