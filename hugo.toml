@@ -26,7 +26,7 @@ style = "monokai"
   hidecolorschemetoggle = false
 
   # customCSS = ["css/custom.css"]
-  # customSCSS = ["scss/custom.scss"]
+  customSCSS = ["scss/sidenotes.scss"]
   # customJS = ["js/custom.js"]
 
 [taxonomies]

@@ -1,0 +1,77 @@
+// See https://0xda.de/blog/2024/07/hugo-sidenotes-shortcode/
+.post {
+    position: relative;
+}
+:root {
+    --amber: #ff9800;
+    --border-color: hsl(0, 0%, 65%);
+}
+
+$sidenote-width: 360px;  // how wide the sidenote can be
+$sidenote-offset: 50px; // how much you want to offset the sidenote from the body
+$container-width: 850px; // how wide your main content is
+
+.sidenote {
+    &:hover {
+        background-color: var(--amber);
+
+        .sidenote-label { text-decoration: none; }
+        .sidenote-content {
+            border: dashed 3px var(--amber);
+            border-radius: 10px;
+        }
+    }
+    .sidenote-label {
+        border-bottom: .2rem dashed var(--amber);
+        display: inline-block;
+    }
+}
+
+.sidenote-checkbox {
+    display: none;
+}
+
+.sidenote-content {
+    display: block;
+    position: absolute;
+    max-width: $sidenote-width;
+    width: fit-content;
+    box-sizing: border-box;
+    margin-top: -1.5em;
+    border: solid 3px var(--border-color);
+    border-radius: 10px;
+    padding: 1.25rem;
+    font-size: .85em;
+
+    &.sidenote-right {
+        left: 100%;
+        margin-right: -($sidenote-width + $sidenote-offset);
+        margin-left: $sidenote-offset;
+    }
+
+    &.sidenote-left {
+        right: 100%;
+        margin-left: -($sidenote-width + $sidenote-offset);
+        margin-right: $sidenote-offset;
+    }
+
+    @media screen and
+      (max-width: $container-width + 2 * ($sidenote-width + 2 * $sidenote-offset)) {
+      position: static;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      width: 100%;
+      display: none;
+
+      .sidenote-checkbox:checked ~ & {
+        display: block;
+      }
+
+      &.sidenote-right {
+        margin-right: 0px;
+      }
+      &.sidenote-left {
+        margin-left: 0px;
+      }
+    }
+}
