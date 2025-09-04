@@ -44,7 +44,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.147.0
+      HUGO_VERSION: 0.148.0
     steps:
       - name: Install Hugo CLI
         run: |
@@ -86,4 +86,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
