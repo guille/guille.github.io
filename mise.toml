@@ -1,0 +1,7 @@
+[tools]
+node = "latest"
+
+[tasks.server]
+description = "Run development server"
+run = "hugo server"
+alias = 's'
