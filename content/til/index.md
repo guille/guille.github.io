@@ -18,6 +18,10 @@ As usual with ser-des operations, it is paramount to have explicit agreements be
 You can do `C-x h` to get zsh's completion context.
 {{% /til  %}}
 
+{{% til title="Get unique items" %}}
+There is a simpler alternative to `sort $file | uniq` : `sort -u $file`
+{{% /til  %}}
+
 ## Databases
 
 {{% til title="Deferred joins" %}}
