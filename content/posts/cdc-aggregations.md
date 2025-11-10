@@ -1,23 +1,14 @@
 +++
-date = 2025-09-01T18:47:32+02:00
+date = 2025-11-09T18:47:32+02:00
 title = "Thoughts on Change Data Capture and aggregations"
-description = "TODO"
+description = "Learning by doing: building a demo with Debezium, Pulsar, Postgres and FastAPI"
 authors = []
 tags = []
 categories = [""]
 externalLink = ""
-draft = true
 +++
 
-GENERAL NOTES
-
-- Add images
-- Add more code!
-- Consider breaking up into diff posts?
-
----
-
-Let's start by considering a few cases:
+Let's dive right in by considering a few scenarios:
 
 - **Banking app**. In order to show the user their current balance, you add up all their bank movements since they opened the account.
 - **CMS**. In order to display a word count at the top of an article, you parse the entire contents and sum up each word.
@@ -25,38 +16,19 @@ Let's start by considering a few cases:
 - **Accounting software**. In order to show a business how much they owe a certain customer, you add up all invoices and payments for that customer.
 - **E-commerce**. In order to calculate product ratings, you sum up all the purchaser's ratings and divide by number of purchasers.
 
-They're all obvious. And they work. But do they scale? The answer is yes, until they don't.
+They're all obvious. And they work. But do they scale? The answer is: "yes, until they don't."
 
-> Caveat; they might, but more complex queries might not! (eg reports)
-
-At some point you will hit some limits and you will wish you could have a pre-calculated response to those queries that only needs to do incremental updates when something changes, instead of re-calculating from scratch.
-
-So, instead of doing
-
-```sql
-SELECT SUM(total)
-FROM transactions
-WHERE customer_id = ?
-	AND ...
-```
-
-You might want to do
-
-```sql
-SELECT balance
-FROM balances
-WHERE customer_id = ?
-```
+At some point you will hit some limits and the obvious solution will be to *somehow* have a pre-calculated response to those queries that only needs to do incremental updates when something changes, instead of re-calculating from scratch every time.
 
 Depending on your scale, your architecture, and the number of Certified AWS Cloud Developers on your team, you will choose a different path to get there.
 
-For a surprising amount of cases, you can just materialise these views. Using something like database triggers or similar mechanisms, you can make it so every time a certain table is updated, another one follows.
+In a lot of cases, or for lower volumes, you can just materialise these views using database triggers or similar mechanisms.
 
 On the other end of the spectrum, we have the move to a full [event source architecture](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/event-sourcing.html). {{< sidenote "This also works," >}}
 <a target="_blank" class="external-link" href="https://medium.com/revolut/event-streaming-the-revolut-way-9d928005ddf7">Some engineers at Revolut have blogged</a> about how they implemented their version, if you want something more hands-on.
 {{< /sidenote >}}but it is a massive re-design and it doesn't come without its own issues.
 
-But we can also find a position in the middle: get *some* of the benefits of event sourcing without all the design constraints.
+We can also find a position in the middle and get *some* of the benefits of event sourcing without all the design constraints.
 
 The pattern I am talking about is called Change Data Capture (CDC). The name is fairly self-explanatory: you want to capture all the changes made to the data. In practice, this usually means having some mechanism in place to deliver events when SQL INSERT/UPDATE/DELETE operations happen.
 
@@ -64,11 +36,11 @@ Once we have that in place, we can easily implement a consumer for these events 
 
 ## Building a demo
 
-Implementing, extending, and maintaining systems that follow that pattern is a lot of what I do in my day to day as a {{< abbrev "Site Reliability Engineer" "SRE" >}}.
+Implementing, extending, and maintaining systems that follow that pattern is a lot of what I do in my day to day as an {{< abbrev "Site Reliability Engineer" "SRE" >}}.
 
-However, most of the architecture was built before I joined the company, so I wanted to make sure I understood the design decisions. The easiest way to do this, I thought, was re-building it. I also wanted to try out a couple of different technologies, so this seemed like the perfect storm.
+Most of the architecture was built before I joined the company, so I wanted to make sure I understood the design decisions. The easiest way to do this, I thought, was re-building it. I also wanted to try out a couple of different technologies, so this seemed like the perfect project.
 
-You can find all the code I am going to discuss in the [GitHub repo](https://github.com/guille/aggregations-pattern).
+You can find all the code I am going to discuss in [this GitHub repo](https://github.com/guille/aggregations-pattern).
 
 Since it's 2025, I started by asking ChatGPT to put something together. I wanted a Python FastAPI back-end serving htmx with Tailwind for the front-end. If nothing else, it put together a better UI on its first attempt than I could have if I had spent a month trying. Then again, I am more likely to become fluent in Kazakh than output a decently-looking web UI if left unsupervised.
 
@@ -92,7 +64,7 @@ For MySQL, [Maxwell's demon](https://maxwells-daemon.io/) can be used to parse t
 > Bottled Water implements CDC for PostgreSQL using an API that decodes the write-ahead log, Maxwell and Debezium do something similar for MySQL by parsing the binlog
 
 Unfortunately, {{< sidenote "Bottled Water" >}}
-It turns out Martin also wrote Bottled Water. Interestingly, he wrote a <a target="_blank" class="external-link"  href="https://www.confluent.io/blog/bottled-water-real-time-integration-of-postgresql-and-kafka/">blog post announcing it</a> that is a near-perfect introduction to the pattern we're addressing here
+It turns out Martin also wrote Bottled Water. Interestingly, he wrote a <a target="_blank" class="external-link"  href="https://www.confluent.io/blog/bottled-water-real-time-integration-of-postgresql-and-kafka/">blog post announcing it</a> that is a near-perfect introduction to the pattern we're implementing here
 {{< /sidenote >}}
 is no longer maintained, but their README points out that Debezium now also supports CDC in Postgres. So Debezium it is.
 
@@ -146,27 +118,28 @@ CREATE TABLE cdc_entries (
 );
 ```
 
-The `cdc_entries` table contains a mix of source data and event data. An {{< abbrev "Log Sequence Number" "LSN" >}} is a pointer to a location in the WAL (the source database's). It is a comfortable way to have ordering in our target database, so we can interpret events correctly. Another implementation could use the timestamp of the source DB's transaction.
+The `cdc_entries` table contains a mix of source data and event data. An {{< abbrev "Log Sequence Number" "LSN" >}} is a pointer to a location in the source database's WAL. It is a comfortable way to have ordering in our target database, so we can interpret events correctly. Another implementation could use the timestamp of the source DB's transaction.
 
-This auxiliary table may not be necessary depending on the guarantee of the messaging infrastructure. If you are assured that a message will be delivered exactly once, in strict monotonic order, and there are no concurrency concerns, you can get away without it. For everyone else, you will need it. I will explain later on exactly why.
 
-### Auxiliary table?
+### Why an auxiliary table?
 
-The replication of CDC falls under what is called “eventual consistency”. This means we expect a delay between when a change happens in the source database and when it is fully reflected in the target store. In most applications of this pattern, we're aiming at sub-1 second times. If I make a payment with my credit card and I open my bank app right after, I expect my balance to be updated to reflect it.
+This auxiliary table may not be necessary depending on the guarantee of the messaging infrastructure. If you are assured that a message will be delivered exactly once, in strict monotonic order, and there are no concurrency concerns, you can get away without it. For everyone else, you will need it or something that performs the same function. I will explain later on exactly why.
 
-This means we need to give up on certain conveniences in order to acquire better performance. As I hinted at before, this pattern gets much easier to use if you have a single consumer of events, guaranteed to get them all exactly once in the same order as they originally happened. However, it is a safe assumption that anyone implementing this pattern cannot afford to have the low latency this would result in.
+The replication of CDC falls under what is called “eventual consistency”. This means we expect a delay between when a change happens in the source database and when it is fully reflected in the target store. In most applications of this pattern, we're aiming at sub-1 second times. You just need to have your aggregates ready by the time the customer clicks or taps away from the creation view and into the reading view. The exact constraints would vary in each domain, but one second is a safe enough bet. Anything over that is trouble, though: customers may re-create their work if they don't see it reflected quickly enough or just decide your service is buggy and stop paying you.
 
-The solution is usually a combination of multiple consumers running in parallel, at-least-once delivery and no ordering guarantees.
+On the one hand, computers are fast, and achieving this upper limit should be easy. On the other hand, this means we need to give up on certain conveniences in order to acquire better performance. As I hinted at before, this pattern gets much easier to use if you have a single consumer of events, guaranteed to get them all exactly once in the same order as they originally happened. However, it is a safe assumption that anyone implementing this pattern cannot afford to have the low latency this would result in.
+
+The solution is usually a combination of multiple consumers running in parallel, at-least-once delivery and no (or little) ordering guarantees.
 
 This is where we understand the value of the `cdc_entries` table. Let's say you get two events. The first event results from **c**reating an invoice with total `10`. The second is from **u**pdating its total to `25`, and the third is for **d**eleting the same invoice. Assuming update events give you the old and the new values, you could process these events like this:
 
 ```sql
--- create
-UPDATE aggregates SET total = total + 10;
--- update
-UPDATE aggregates SET total = total - 10 + 25;
--- delete
-UPDATE aggregates SET total = total - 25;
+-- create: add new value
+UPDATE aggregates SET total = total + 10;      -- = 10
+-- update: substract old value, add new value
+UPDATE aggregates SET total = total - 10 + 25; -- = 25
+-- delete: substract old value
+UPDATE aggregates SET total = total - 25;      -- =  0
 ```
 
 Easy enough. But what happens if the events are processed out of order?
@@ -180,36 +153,42 @@ UPDATE aggregates SET total = total - 25;      -- = -10
 UPDATE aggregates SET total = total + 10;      -- =   0
 ```
 
-Our result is eventually correct, but we have an unreasonable intermediate state. Our balance was `10`, `25`, and `0`. It was never `15`, let alone a negative `-10`! In many domains, this is unacceptable. But not always. So do we run into any other issues?
+Our result is eventually correct, but we have an unreasonable intermediate state. Our balance was `10`, `25`, and `0`. It was never `15`, let alone a negative `-10`! In many domains, this is unacceptable.
+
+Do we run into any other issues?
 
 It turns out, a couple. They are really the same issue but in different forms. Without a `cdc_entries` (or equivalent) table:
-1. You need to ensure *exactly-once* delivery. If events may get delivered more than once, you will end up with double writes.
-2. You lose disaster recovery. What happens if something crashes and you need to replay some events? For the same reason as the point above... you can't. You might need to reset the current aggregate and re-calculate from the entire state of the source database.
-3. You can't bootstrap your data. In our demo app, we start with an empty source database and we replicate as we go. In the real world, this almost never happens. You want to replicate an already-existing database. For that, sending events for changes is not enough, you also need some way of bootstrapping the previously-existing data. You would need to somehow time the bootstrap perfectly with the CDC events to avoid double writes, even in a *exactly-once* delivery system.
+1. You need to ensure *exactly-once* delivery. If events may get delivered more than once, you will end up with double writes as you have no way of de-duplicating them.
+2. You lose disaster recovery. What happens if something crashes and you need to replay some events? For the same reason as the point above... you can't. You might need to reset the current aggregate and re-calculate from scratch.
+3. You can't bootstrap your data. In our demo app, we start with an empty source database and we replicate as we go. In the real world, this almost never happens. You usually want to replicate an already-existing database. For that, sending events for changes is not enough, you also need some way of bootstrapping the previously-existing data. You would need to somehow time the bootstrap perfectly with the CDC events to avoid double writes, even in an *exactly-once* delivery system.
 
 An auxiliary table storing some sort of reference and a timestamp (or LSN in our case) solves these. It can even mitigate (some) missing events, as long as a newer event arrives.
 
-We can conceptually divide operations into **c**reate, **u**pdate, and **d**elete (CUD). There are some design decisions we need to address on our auxiliary table.
+### Filling the auxiliary table
 
-The first one is how to handle updates. We can either treat them as upserts (insert the row in `cdc_entries` with the new value if it doesn't exist) or as pure updates, in which case we will reject processing them until the row exists.
+We can conceptually divide operations into **c**reate, **u**pdate, and **d**elete (CUD). There are two main design decisions we need to address on our auxiliary table.
 
-The other decision is about delete events. Do we consider them soft or hard deletes? That is, should they zero out the `cdc_entries` row or delete it?
+1. How to handle updates. We can either treat them as "upserts" (insert the row in `cdc_entries` with the new value if it doesn't exist) or as pure updates, in which case we will reject processing them until the row exists.
+2. Do we consider delete events soft or hard deletes? That is, should they zero out the `cdc_entries` row or delete it?
 
-It turns out these decisions must be taken together. We either have upserts and soft deletes or pure updates and hard deletes. This is to protect ourselves from out of order events. If we had upserts and hard deletes, a delayed update could restore something that has already been deleted.
+Out of these, worst option would be to go with upserts and hard deletes: a delayed update could restore something that has already been deleted.
 
-In my opinion, the first option is superior. It is easier to reason about and more efficient in terms of latency: we can always ignore outdated events, whereas the hard delete approach requires to keep retrying for as long as possible to account for out-of-order events. The soft delete approach is less efficient in terms of space, as it will leave “tombstones” from soft deletions. Depending on how big an issue this is, it can be ignored or there could be a periodic cleanup process that deletes tombstone rows for which we are sure don't have events in flight anymore.
+The best one, in my opinion, is to have upserts and soft deletes. For starters (and this is always important when dealing with distributed systems), it is easier to reason about and more efficient in terms of latency: we can always ignore outdated events, whereas the hard delete approach requires to keep retrying for as long as possible to account for out-of-order events.
+
+The soft delete approach is admittedly less efficient in terms of space, as it will leave “tombstones” from soft deletions. Depending on how big an issue this is, it can be ignored or there could be a periodic cleanup process that deletes tombstone rows for which we are sure don't have events in flight anymore.
 
 In fact, with this approach we can even treat delete events as upserts, which makes them even easier to reason about. Getting a Delete before its Insert is rare but not impossible. In that case, it will insert a row in `cdc_entries` with total zero, not change the aggregates, and prevent later LSNs from touching that row (including inserts).
 
-Note that the current approach in my demo code does not consider soft deletes in the source database (`deleted_at=$timestamp`). It would need slightly different handling, like treating certain updates as deletes. Another layer of complexity could be added by supporting restore operations (setting `deleted_at` back to `NULL`), but these are —I think— relatively trivial changes.
+{{< notice tip >}} Note that the current approach in my demo code does not consider soft deletes in the source database (`deleted_at=$timestamp`). It would need slightly different handling, like treating certain updates as deletes. Another layer of complexity could be added by supporting restore operations (setting `deleted_at` back to `NULL`), but these are relatively trivial changes. {{< /notice >}}
+
 
 ### The algorithm
 
 We are ready to implement our aggregation logic.
 
-The specific implementation will change depending on the type of event. However, in all of these cases, we want to start by querying the LSN associated with our `invoice_id` in the `cdc_entries` table. If the LSN in the database is greater or equal than the one we have, we can safely drop the event: it's updated or duplicated.
+The specific implementation will change depending on the type of event. However, in all of these cases, we want to start by fetching the LSN associated with our `invoice_id` in the `cdc_entries` table. If the LSN in the database is greater or equal than the one we have, we can safely drop the event: it's either outdated or duplicated.
 
-Otherwise, we want to update the row (or insert a new one if it doesn't exist) with the `invoice_id`, the `total` we got from the event (`0` for deletions) and the LSN of the event.
+If the event's LSN is higher, we want to update the row (or insert a new one if it doesn't exist) with the `invoice_id`, the `total` we got from the event (`0` for deletions) and the LSN of the event.
 
 After that, we will update the aggregates table.
 
@@ -241,32 +220,34 @@ Same principle applies, with the corollary that `$old_entry_total` will be zero 
 $current_aggregate - $old_entry_total
 ```
 
+You have probably noticed that all of these are cases of the update formula, where creates have `$old_entry_total=0` and deletes have `$new_entry_total=0`
+
 ### Locking
 
-Another thing to consider is that we will have multiple customers consuming events from Pulsar and trying to apply changes to the target data store. My demo actually has a potential race condition here if running multiple consumers concurrently. A `SELECT ... FOR UPDATE` is guarding the `cdc_entries` table, but I don't have any for the aggregate table.
+Another thing to consider is that we will have multiple Pulsar customers processing CDC events and trying to apply changes to the target data store. Beyond ensuring both tables are updated atomically, we also need to ensure different customers don't step on each others' toes.
 
-The solution could be adding another `SELECT ... FOR UPDATE` for that table's row, or even a Redis lock if we're committing to overengineering this. For now, we will just stick to a single-process consumer, and that will fix it.
+My demo actually has a potential race condition here if running multiple consumers concurrently. A `SELECT ... FOR UPDATE` is guarding the `cdc_entries` table, but I don't have any for the aggregate table. The solution could be adding another `SELECT ... FOR UPDATE` for that table's row, or a Redis lock if we're committing to overengineering this. For now, we will just stick to a single-process consumer, and that will fix it.
 
 
-### Tools
+## Beyond the demo
 
 Once this architecture is in place, with enough time and customers some requirements will appear.
 
 First, you will likely need to bootstrap existing data into your target datastore, until it can be brought up to a state where CDC alone can keep it updated. In our case, this would require a simple script that basically:
 
 1. Selects all the rows from the source table.
-2. Wraps it in the same event format as Debezium uses
-3. Send it to the right topic on Pulsar.
+2. Wraps it in the same event format as Debezium uses.
+3. Publishes the payload to the right Pulsar topic.
 
-Astute readers might notice this has potential beyond initial bootstrapping, as it allows (some) replayability of events. By altering the query from step (1), and maybe forcing the event to be a certain type, we can adjust data as needed, and make up for missed events.
+Astute readers might notice this has potential beyond initial bootstrapping, as it allows (some) replayability of events. By altering the query from step (1), and maybe forcing the event to be a certain type, we can adjust data as needed, and make up for missed events or even apply targeted data fixes.
 
-The advantage of using timestamps instead of LSNs is that, although slightly more issue-prone, they do make this process more readable, as you can fake older or newer events in an easy manner, whereas with LSNs you will usually force them to the current LSN at the time of bootstrapping, or even an artificially low one for initial setup.
+The advantage of using timestamps instead of LSNs is that, although slightly more issue-prone, they do make this process more readable, as you can fake older or newer events in an easy manner, whereas with LSNs you will usually force them to the current LSN at the time of bootstrapping, or perhaps an artificially low one for initial setup.
 
 Another interesting tool will become obvious when you are asked to investigate why your aggregates are not correct. Whatever the cause, a tool that is able to (1) recalculate aggregates based on `cdc_entries` and/or (2) compare `cdc_entries` to the source data for inconsistencies will prove invaluable.
 
 {{< notice note >}} If you are curious as to how the current implementation can handle out-of-order events with no incorrect intermediate states, the rest of the post runs through a particular example. I find doing this is a very useful way to reason about events, but it is fairly boring to read. If you are not interested, there is nothing else beyond that, you can stop scrolling. Thanks for reading! {{< /notice >}}
 
-### Appendix: Out-of-order processing examples
+## Appendix: Out-of-order processing examples
 
 For all cases: assume our starting state for the aggregation DB is:
 - cdc_entries: one row with `(id: 1, total: 10)`
@@ -279,7 +260,7 @@ Then we will be creating a new invoice (id 2) with a total of `20`, updating it 
 
 The only correct final value is the same as the starting state: `10`.
 
-#### Happy path operation:
+### Happy path operation:
 
 
 **CASE 1:** create `(id:2, total: 20)` ⇒ update `(id:2, total: 40)` ⇒ delete `(id:2, total: 40)`
