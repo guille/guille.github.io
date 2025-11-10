@@ -1,7 +1,13 @@
 [tools]
 node = "latest"
+hugo-extended = "latest"
 
 [tasks.server]
 description = "Run development server"
 run = "hugo server"
 alias = 's'
+
+[hooks]
+postinstall = [
+	"git submodule update --init"
+]
