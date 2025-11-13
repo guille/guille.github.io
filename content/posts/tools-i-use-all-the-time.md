@@ -1,18 +1,27 @@
 +++
-date = 2025-10-31T16:40:45+01:00
-title = "Tools I use all the time"
-description = "TODO"
+date = 2025-11-09T16:40:45+01:00
+title = "Building a terminal workflow"
+description = "An excuse to show off different tools and scripts"
 slug = ""
 authors = []
 tags = []
-categories = ["Tool spotlights"]
+categories = [""]
 externalLink = ""
 draft = true
 +++
 
 
+I've previously written about [tinkering](/posts/tinkering/). I spend probably more time than I should building a workflow that feels nice to me. Since I spent a lot of time in the terminal, that's where most of my tinkering ends up happening.
 
-Following https://evanhahn.com/scripts-i-wrote-that-i-use-all-the-time/
+Inspired by [this blog post](https://evanhahn.com/scripts-i-wrote-that-i-use-all-the-time/) by Evan Hahn that recently made the rounds in Hacker News, I wanted to share some tools and scripts that I use in my day-to-day workflow.
+
+I will try to give credit where I can, but I have ~stolen~ taken inspiration from countless dotfiles repositories, and I haven't always been very diligent in sharing where I got things from. To be fair, I'm fairly certain some of my copypastes were from people that had copypasted it from somewhere else, that's just how it goes I suppose.
+
+The first thing you get when opening a terminal window is the prompt, so let's start there. Beyond all the visual niceties, I find powerlevel10k to be an amazing option thanks to its [instant prompt](https://github.com/romkatv/powerlevel10k#instant-prompt). The other way to get an instant prompt, of course, is to have a basic prompt that doesn't do anything, but that's much less fun.
+
+The last few years have seen a flurry of tools that aim to replace some staples
+
+
 
 Mise:
 - postinstall hooks (eg doing `uv sync` or `bundle install`, setting up pre-commit hooks)
@@ -45,7 +54,7 @@ alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
 ```zsh
 notes() {
 	notes_dir=~/notes
-	fd . $notes_dir | ff --multi --delimiter '/' --with-nth -1 --print0  | xargs subl
+	fd . $notes_dir | ff --multi --delimiter '/' --with-nth -1 --print0 --query ${1:-""} | xargs subl
 }
 ```
 
