@@ -55,3 +55,6 @@ By rewriting it as
 Obvious in retrospect, but when working with different countries in B2B it helps to check when their holidays are.
 {{% /til  %}}
 
+{{% til title="Re-think allowing emails" %}}
+Letting customers send customised e-mails through your platform will attrack very persistent scammers or varying sophistication levels.
+{{% /til  %}}
