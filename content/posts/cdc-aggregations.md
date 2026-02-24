@@ -6,6 +6,8 @@ authors = []
 tags = []
 categories = [""]
 externalLink = ""
+toc = true
+tocOpen = true
 +++
 
 Let's dive right in by considering a few scenarios:
@@ -260,7 +262,7 @@ Then we will be creating a new invoice (id 2) with a total of `20`, updating it 
 
 The only correct final value is the same as the starting state: `10`.
 
-### Happy path operation:
+### Happy path operation
 
 
 **CASE 1:** create `(id:2, total: 20)` ⇒ update `(id:2, total: 40)` ⇒ delete `(id:2, total: 40)`
@@ -272,7 +274,7 @@ The only correct final value is the same as the starting state: `10`.
 - D: updates LSN in `cdc_entries`
 - D: decrease aggregate (`50-40=10`)
 
-### Out-of-order arrivals:
+### Out-of-order arrivals
 
 
 **CASE 2:** create `(id:2, total: 20)` ⇒ delete `(id:2, total: 40)` ⇒ update `(id:2, total: 40)`
