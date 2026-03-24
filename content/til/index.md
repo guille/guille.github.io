@@ -3,7 +3,7 @@ title = 'TIL'
 date = 2025-05-21T20:07:58+02:00
 +++
 
-Following [established](https://jvns.ca/til/) [precedent](https://til.simonwillison.net/).
+Following [long](https://jonasbn.github.io/til/) [established](https://jvns.ca/til/) [precedent](https://til.simonwillison.net/).
 
 ## Serialisation
 
