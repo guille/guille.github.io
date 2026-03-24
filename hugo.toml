@@ -16,9 +16,10 @@ style = "monokai"
   keywords = "blog,developer,personal"
   avatarurl = "images/avatar.png"
 
-  faviconSVG = "/img/favicon.svg"
-  favicon_32 = "/img/favicon-32x32.png"
-  favicon_16 = "/img/favicon-16x16.png"
+  faviconSVG = "images/favicon.svg"
+  favicon_32 = "images/favicon-32x32.png"
+  favicon_16 = "images/favicon-16x16.png"
+  touchIcon = "images/apple-touch-icon.png"
 
   since = 2024
 
