@@ -22,6 +22,24 @@ You can do `C-x h` to get zsh's completion context.
 There is a simpler alternative to `sort $file | uniq` : `sort -u $file`
 {{% /til  %}}
 
+## Ruby
+
+{{% til title="Use blocks" %}}
+Prefer blocks for code paths that are potentially slow. For example, if you have a `#slow_method`:
+```rb
+# bad: calling the method even on higher log levels
+logger.debug("result: #{slow_method}")
+# good:
+logger.debug { "result: #{slow_method}" }
+
+# bad: calculating the default even when some_key is present
+some_hash.fetch(some_key, slow_method)
+# good:
+some_hash.fetch(some_key) { slow_method }
+```
+{{% /til  %}}
+
+
 ## Databases
 
 {{% til title="Deferred joins" %}}
