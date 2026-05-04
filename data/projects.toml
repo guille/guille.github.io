@@ -1,0 +1,11 @@
+[[projects]]
+name        = "PTY Daemon"
+description = "A daemonized shell built from scratch to understand how terminals and tmux work under the hood."
+url         = "https://github.com/guille/dmn"
+tags        = ["Python", "Linux", "Systems"]
+
+[[projects]]
+name        = "CDC Aggregator"
+description = "A proof-of-concept Change Data Capture pipeline for maintaining real-time aggregations without recomputing from scratch."
+url         = "https://github.com/guille/aggregations-pattern"
+tags        = ["Python", "Apache Pulsar", "PostgreSQL"]

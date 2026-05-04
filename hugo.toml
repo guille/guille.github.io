@@ -1,0 +1,77 @@
+baseURL      = "https://guille.github.io/"
+title        = "Guillermo Rodríguez"
+languageCode = "en-uk"
+
+pagination.pagerSize = 20
+
+[outputs]
+home    = ["HTML"]
+section = ["HTML", "RSS"]
+page    = ["HTML"]
+
+[markup.highlight]
+style = "monokai"
+
+# Needed for TIL
+[markup.goldmark.renderer]
+unsafe = true
+
+[params]
+author      = "Guillermo Rodríguez"
+info        = "Senior Software Engineer"
+description = "Guillermo Rodríguez's personal website"
+keywords    = "blog,developer,personal"
+avatarURL   = "images/avatar.png"
+since       = 2024
+faviconSVG  = "images/favicon.svg"
+favicon_32  = "images/favicon-32x32.png"
+favicon_16  = "images/favicon-16x16.png"
+touchIcon   = "images/apple-touch-icon.png"
+
+[[params.social]]
+name = "GitHub"
+icon = "github"
+url  = "https://github.com/guille/"
+
+[[params.social]]
+name = "LinkedIn"
+icon = "linkedin"
+url  = "https://www.linkedin.com/in/guille-rodriguez/"
+
+[[params.social]]
+name = "Résumé"
+icon = "document"
+url  = "/cv.pdf"
+
+[[params.social]]
+name = "RSS"
+icon = "rss"
+url  = "/posts/index.xml"
+
+[params.goatCounter]
+code = "guille"
+
+[[menu.main]]
+name   = "Blog"
+weight = 1
+url    = "posts/"
+
+[[menu.main]]
+name   = "TIL"
+weight = 2
+url    = "til/"
+
+# [[menu.main]]
+# name   = "Portfolio"
+# weight = 3
+# url    = "portfolio/"
+
+[[menu.main]]
+name   = "About"
+weight = 3
+url    = "about/"
+
+[[menu.main]]
+name   = "Résumé"
+weight = 4
+url    = "/cv.pdf"

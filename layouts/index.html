@@ -1,0 +1,12 @@
+{{ define "main" }}
+<section class="homepage">
+  {{ with .Site.Params.avatarURL }}
+  <img class="avatar" src="{{ . | relURL }}" alt="{{ $.Site.Params.author }}">
+  {{ end }}
+  <h1>{{ .Site.Params.author }}</h1>
+  {{ with .Site.Params.info }}
+  <p class="subtitle">{{ . }}</p>
+  {{ end }}
+  {{ partial "social-icons.html" . }}
+</section>
+{{ end }}

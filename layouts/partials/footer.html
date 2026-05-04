@@ -1,0 +1,5 @@
+<footer class="site-footer">
+  <div class="container">
+    <span>&copy; {{ with .Site.Params.since }}{{ . }}&ndash;{{ end }}{{ now.Year }} {{ .Site.Params.author | default .Site.Title }}</span>
+  </div>
+</footer>

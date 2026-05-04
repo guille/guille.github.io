@@ -1,0 +1,29 @@
+{{ define "main" }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+
+{{ $pages := .Pages.ByDate.Reverse }}
+{{ $years := slice }}
+{{ range $pages }}
+  {{ $year := .Date.Format "2006" }}
+  {{ if not (in $years $year) }}
+    {{ $years = $years | append $year }}
+  {{ end }}
+{{ end }}
+
+{{ range $year := $years }}
+<section class="post-year-section">
+  <h2 class="post-year">{{ $year }}</h2>
+  <ul class="post-list">
+    {{ range $pages }}
+      {{ if eq (.Date.Format "2006") $year }}
+    <li class="post-item">
+      <span class="post-date">{{ .Date.Format "Jan 2" }}</span>
+      <a class="post-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
+    </li>
+      {{ end }}
+    {{ end }}
+  </ul>
+</section>
+{{ end }}
+{{ end }}

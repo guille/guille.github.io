@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en" }}">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  {{ partial "header.html" . }}
+  <main class="container">
+    {{ block "main" . }}{{ end }}
+  </main>
+  {{ partial "footer.html" . }}
+  {{ partial "goatcounter.html" . }}
+  {{/* Conditional asset loading: only include JS/CSS for features used on this page */}}
+  {{ if .Scratch.Get "needsToc" }}
+  {{ $tocJS := resources.Get "js/toc.js" | minify }}
+  <script>{{ $tocJS.Content | safeJS }}</script>
+  {{ end }}
+  {{ if .Scratch.Get "needsMermaid" }}
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+  {{ end }}
+  {{ with .Scratch.Get "pageJS" }}
+    {{ range . }}<script src="{{ . }}" defer></script>{{ end }}
+  {{ end }}
+  {{ with .Scratch.Get "pageCSS" }}
+    {{ range . }}<link rel="stylesheet" href="{{ . }}">{{ end }}
+  {{ end }}
+  <script>
+    (function() {
+      const toggle = document.querySelector('.theme-toggle');
+      if (!toggle) return;
+      const html = document.documentElement;
+      const stored = localStorage.getItem('theme');
+      if (stored) html.setAttribute('data-theme', stored);
+      toggle.addEventListener('click', function() {
+        const current = html.getAttribute('data-theme');
+        const isDark = current === 'dark' || (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        const next = isDark ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
+</body>
+</html>

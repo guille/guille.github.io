@@ -1,0 +1,7 @@
+{{- $src := .Destination -}}
+{{- $alt := .Text -}}
+{{- $title := .Title -}}
+{{- $img := .Page.Resources.GetMatch $src -}}
+<img src="{{ $src }}" alt="{{ $alt }}"
+{{- with $title }} title="{{ . }}"{{ end -}}
+{{- with $img }} width="{{ .Width }}" height="{{ .Height }}"{{ end }} loading="lazy" decoding="async">

@@ -1,0 +1,24 @@
+<header class="site-header">
+  <div class="container">
+    <div class="site-title">
+      <a href="{{ "/" | relURL }}">{{ .Site.Title }}</a>
+    </div>
+    <div class="header-right">
+      {{ if .Site.Menus.main }}
+      <nav aria-label="Main navigation">
+        <ul class="site-nav">
+          {{ range .Site.Menus.main }}
+          <li><a href="{{ .URL | relURL }}"{{ if $.IsMenuCurrent "main" . }} aria-current="page"{{ end }}{{ if $.HasMenuCurrent "main" . }} aria-current="true"{{ end }}>{{ .Name }}</a></li>
+          {{ end }}
+        </ul>
+      </nav>
+      {{ end }}
+      {{ if hugo.IsServer }}
+      <button class="theme-toggle" aria-label="Toggle color scheme" title="Toggle color scheme">
+        <span class="theme-toggle-dark">☀︎</span>
+        <span class="theme-toggle-light">☾</span>
+      </button>
+      {{ end }}
+    </div>
+  </div>
+</header>

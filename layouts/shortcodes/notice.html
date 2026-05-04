@@ -1,0 +1,7 @@
+{{- $type := .Get 0 -}}
+{{- $title := .Get 1 | default $type | humanize -}}
+{{- $inner := .Inner | .Page.RenderString | chomp -}}
+<div class="notice notice-{{ $type }}">
+  <div class="notice-title">{{ $title }}</div>
+  <div class="notice-content">{{ $inner }}</div>
+</div>
