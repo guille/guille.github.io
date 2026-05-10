@@ -1,8 +1,8 @@
 {{ define "main" }}
 <section class="homepage">
-  {{ with .Site.Params.avatarURL }}
-  <img class="avatar" src="{{ . | relURL }}" alt="{{ $.Site.Params.author }}">
-  {{ end }}
+  <img class="avatar" src="{{ .Site.Params.avatarURL_1x | relURL }}"
+    srcset="{{ .Site.Params.avatarURL_1x | relURL }} 1x,{{ .Site.Params.avatarURL_2x | relURL }} 2x" width="144px"
+    height="144px" fetchpriority="high" loading="eager" alt="{{ $.Site.Params.author }}">
   <h1>{{ .Site.Params.author }}</h1>
   {{ with .Site.Params.info }}
   <p class="subtitle">{{ . }}</p>

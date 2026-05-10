@@ -85,7 +85,7 @@ mycommand -h 2>&1 | bat --language=help --style=plain
 
 So basically it pipes the command out to `bat` with a specific syntax highlighting. Pretty neat. The only downside is the few commands that have `-h` be something other than help, but thankfully those aren't too common.
 
-![bat's help with syntax highlighting](/images/bathelp.png)
+![bat's help with syntax highlighting](/images/bathelp.webp)
 
 ## new new tools
 

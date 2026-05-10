@@ -17,16 +17,17 @@ style = "monokai"
 unsafe = true
 
 [params]
-author      = "Guillermo Rodríguez"
-info        = "Senior Software Engineer"
-description = "Guillermo Rodríguez's personal website"
-keywords    = "blog,developer,personal"
-avatarURL   = "images/avatar.png"
-since       = 2024
-faviconSVG  = "images/favicon.svg"
-favicon_32  = "images/favicon-32x32.png"
-favicon_16  = "images/favicon-16x16.png"
-touchIcon   = "images/apple-touch-icon.png"
+author       = "Guillermo Rodríguez"
+info         = "Senior Software Engineer"
+description  = "Guillermo Rodríguez's personal website"
+keywords     = "blog,developer,personal"
+avatarURL_1x = "images/avatar-144.webp"
+avatarURL_2x = "images/avatar-288.webp"
+since        = 2024
+faviconSVG   = "images/favicon.svg"
+favicon_32   = "images/favicon-32x32.png"
+favicon_16   = "images/favicon-16x16.png"
+touchIcon    = "images/apple-touch-icon.png"
 
 [[params.social]]
 name = "GitHub"
