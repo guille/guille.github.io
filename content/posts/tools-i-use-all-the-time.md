@@ -92,6 +92,8 @@ So basically it pipes the command out to `bat` with a specific syntax highlighti
 
 ### [mise](https://mise.jdx.dev/)
 
+{{< notice "May 2026 update" >}} Mise is developing at a very high pace. Lately it seems like every other update ships four new features, fixes two and breaks three. I still use it and recommend it, but it is starting to annoy me. Anecdotally (or not?), mise's development seems to rely a lot on LLM contributions. {{< /notice >}}
+
 Mise's aim is to replace three sorts of tools: a version manager (like asdf), a task runner (make/just) and an environment variable manager (like direnv).
 
 I use it for all three. On the tooling department, it's particularly useful to manage Ruby versions with it since they've started offering precompiled Rubies. It has also been a godsend for installing things for a Fedora laptop I got at work. I am used to pacman's amazing repositories (plus the AUR) and Fedora's doesn't compare. For some things I'd rather do `mise use --global github:atanunq/viu` than add yet another COPR repository.
