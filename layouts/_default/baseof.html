@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode | default "en" }}">
+<html lang="{{ .Site.Language.Locale | default " en" }}">
+
 <head>
   {{ partial "head.html" . }}
 </head>
+
 <body>
   {{ partial "header.html" . }}
   <main class="container">
@@ -13,7 +15,7 @@
   {{/* Conditional asset loading: only include JS/CSS for features used on this page */}}
   {{ if .Scratch.Get "needsToc" }}
   {{ $tocJS := resources.Get "js/toc.js" | minify }}
-  <script>{{ $tocJS.Content | safeJS }}</script>
+  <script>{ { $tocJS.Content | safeJS } }</script>
   {{ end }}
   {{ if .Scratch.Get "needsMermaid" }}
   <script type="module">
@@ -22,10 +24,12 @@
   </script>
   {{ end }}
   {{ with .Scratch.Get "pageJS" }}
-    {{ range . }}<script src="{{ . }}" defer></script>{{ end }}
+  {{ range . }}
+  <script src="{{ . }}" defer></script>{{ end }}
   {{ end }}
   {{ with .Scratch.Get "pageCSS" }}
-    {{ range . }}<link rel="stylesheet" href="{{ . }}">{{ end }}
+  {{ range . }}
+  <link rel="stylesheet" href="{{ . }}">{{ end }}
   {{ end }}
   <script>
     (function() {
@@ -44,4 +48,5 @@
     })();
   </script>
 </body>
+
 </html>

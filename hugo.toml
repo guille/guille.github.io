@@ -1,6 +1,5 @@
-baseURL      = "https://guille.github.io/"
-title        = "Guillermo Rodríguez"
-languageCode = "en-uk"
+baseURL = "https://guille.github.io/"
+title   = "Guillermo Rodríguez"
 
 pagination.pagerSize = 20
 
@@ -76,3 +75,7 @@ url    = "about/"
 name   = "Résumé"
 weight = 4
 url    = "/cv.pdf"
+
+[languages]
+[languages.en-uk]
+locale = "en"

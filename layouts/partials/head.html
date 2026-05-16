@@ -14,7 +14,7 @@
 <meta property="og:site_name" content="{{ .Site.Title }}">
 <meta property="og:title" content="{{ .Title }}">
 <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
-<meta property="og:locale" content="{{ .Site.LanguageCode }}">
+<meta property="og:locale" content="{{ .Site.Language.Locale }}">
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
 
 <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
