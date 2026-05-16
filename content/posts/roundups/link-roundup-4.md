@@ -28,19 +28,19 @@ externalLink = ""
 
 - [3Blue1Brown visualisations](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi), 8-video course on neural networks.
 - Spreadsheets continue being one of the most versatile tools invented. Why not use them to [learn about AI](https://spreadsheets-are-all-you-need.ai/)?
-	- https://www.youtube.com/watch?v=FyeN5tXMnJ8
-	- https://www.youtube.com/watch?v=PvZN3-WqAOI
-	- https://www.youtube.com/watch?v=v6yD5SOxOXI
+	- [Lesson 1: Demystifying how GPT works: From Architecture to...Excel!?!](https://www.youtube.com/watch?v=FyeN5tXMnJ8)
+	- [Lesson 2: Byte Pair Encoding in AI Explained with a Spreadsheet](https://www.youtube.com/watch?v=PvZN3-WqAOI)
+	- [Lesson 3: Understanding Word Embeddings in AI and LLMs](https://www.youtube.com/watch?v=v6yD5SOxOXI)
 
 These come recommended but I haven't had the time to go through them yet:
-- https://www.understandingai.org/p/large-language-models-explained-with
-- https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/
+- [Large language models, explained with a minimum of math and jargon](https://www.understandingai.org/p/large-language-models-explained-with).
+- [What Is ChatGPT Doing … and Why Does It Work?](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/), by Stephen Wolfram.
 
 **9)** And finally, a couple of links in the very popular "how I use LLMs" sub-genre that I found particularly insightful.
 
-- https://www.seangoedecke.com/how-i-use-llms/
-- https://simonwillison.net/2025/Mar/11/using-llms-for-code/
+- Sean Goedecke's [How I use LLMs as a staff engineer](https://www.seangoedecke.com/how-i-use-llms/)
+- Simon Williams: [Here’s how I use LLMs to help me write code](https://simonwillison.net/2025/Mar/11/using-llms-for-code/). Good summary:
 
 > My current favorite mental model is to think of them as an over-confident pair programming assistant who’s lightning fast at looking things up, can churn out relevant examples at a moment’s notice and can execute on tedious tasks without complaint.
 
-- https://simonwillison.net/2025/Jul/4/identify-solve-verify/#atom-everything
+- Also by Simon Williams: [this short snippet on why he's not worried for his career](https://simonwillison.net/2025/Jul/4/identify-solve-verify/).
