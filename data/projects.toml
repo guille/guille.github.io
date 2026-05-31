@@ -1,11 +1,78 @@
 [[projects]]
-name        = "PTY Daemon"
-description = "A daemonized shell built from scratch to understand how terminals and tmux work under the hood."
-url         = "https://github.com/guille/dmn"
-tags        = ["Python", "Linux", "Systems"]
+name        = "revisa"
+description = "A fast, native GUI diff viewer for Linux, built in Rust with egui."
+repo        = "https://github.com/guille/revisa"
+site        = "https://revisa.guillerg.dev/"
+tags        = ["rust"]
+
+[[projects]]
+name        = "florilegio"
+description = "A personal read-it-later app. Flutter frontend for Android and web; Hono backend on Cloudflare Workers with D1."
+repo        = "https://github.com/guille/florilegio"
+site        = "https://florilegio.guillerg.dev/"
+tags        = ["flutter", "hono"]
+
+[[projects]]
+name        = "orbit"
+description = "A declarative CLI for tasks and reminders, backed by systemd timers."
+repo        = "https://github.com/guille/orbit"
+tags        = ["go"]
+
+[[projects]]
+name        = "download_tv"
+description = "Web scraper and CLI that bridges a TV-show tracker with torrent search sites."
+repo        = "https://github.com/guille/download_tv"
+tags        = ["ruby"]
+
+[[projects]]
+name        = "dmn"
+description = "A daemonized shell with multi-client attach: connect from another terminal, or from a browser via libghostty."
+repo        = "https://github.com/guille/dmn"
+site        = "/posts/dmn/#the-demo"
+tags        = ["python"]
+
+[[projects]]
+name        = "RaftCore"
+description = "An implementation of the Raft consensus algorithm in C#, with a companion web-based simulator and visualizer."
+repos       = [
+  { url = "https://github.com/guille/RaftCore", label = "RaftCore" },
+  { url = "https://github.com/guille/RaftCoreWeb", label = "Visualizer" }
+]
+tags        = ["csharp", "d3"]
 
 [[projects]]
 name        = "CDC Aggregator"
 description = "A proof-of-concept Change Data Capture pipeline for maintaining real-time aggregations without recomputing from scratch."
-url         = "https://github.com/guille/aggregations-pattern"
-tags        = ["Python", "Apache Pulsar", "PostgreSQL"]
+repo        = "https://github.com/guille/aggregations-pattern"
+tags        = ["python", "pulsar", "postgresql"]
+
+[[projects]]
+name        = "integritas"
+description = "A file integrity checker built on BLAKE3, faster than hashdeep."
+repo        = "https://github.com/guille/integritas"
+tags        = ["rust"]
+
+# Smaller things: still maintained / used by me, but not worth a full card.
+[[projects]]
+name        = "rss-builder"
+description = "Generates RSS feeds for sites that don't offer them, run daily by GitHub Actions."
+repo        = "https://github.com/guille/rss-builder"
+smaller     = true
+
+[[projects]]
+name        = "slack-socket-mode-bot"
+description = "A Ruby gem for building simple Slack bots over Socket Mode, written when we needed to migrate an internal bot at work."
+repo        = "https://github.com/guille/slack-socket-mode-bot"
+smaller     = true
+
+[[projects]]
+name        = "sublime-mise"
+description = "mise integration for Sublime Text — auto-activates the right tool versions per project."
+repo        = "https://github.com/guille/sublime-mise"
+smaller     = true
+
+[[projects]]
+name        = "sublime-bulk-renamer"
+description = "Rename many files at once from inside Sublime Text."
+repo        = "https://github.com/guille/sublime-bulk-renamer"
+smaller     = true
