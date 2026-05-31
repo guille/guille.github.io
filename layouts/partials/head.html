@@ -1,6 +1,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#252525" media="(prefers-color-scheme: dark)">
 
 {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
 {{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
@@ -15,7 +17,7 @@
 <meta property="og:title" content="{{ .Title }}">
 <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
 <meta property="og:locale" content="{{ .Site.Language.Locale }}">
-<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:type" content="{{ if and .IsPage (in (slice "posts" "til") .Section) }}article{{ else }}website{{ end }}">
 
 <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
 
@@ -33,4 +35,34 @@
 {{ with .OutputFormats.Get "rss" }}
 <link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ $.Site.Title }}">
 {{ end }}
+{{ end }}
+
+{{ if .IsHome }}
+{{ $sameAs := slice }}
+{{ range .Site.Params.social }}
+{{ if hasPrefix .url "http" }}{{ $sameAs = $sameAs | append .url }}{{ end }}
+{{ end }}
+{{ $person := dict
+  "@type" "Person"
+  "name" .Site.Params.author
+  "url" .Site.BaseURL
+  "jobTitle" .Site.Params.info
+  "sameAs" $sameAs
+}}
+{{ $website := dict
+  "@context" "https://schema.org"
+  "@graph" (slice
+    (dict
+      "@type" "WebSite"
+      "@id" (printf "%s#website" .Site.BaseURL)
+      "url" .Site.BaseURL
+      "name" .Site.Title
+      "description" .Site.Params.description
+      "inLanguage" .Site.Language.Lang
+      "publisher" (dict "@id" (printf "%s#person" .Site.BaseURL))
+    )
+    (merge $person (dict "@id" (printf "%s#person" .Site.BaseURL)))
+  )
+}}
+<script type="application/ld+json">{{ $website | jsonify (dict "indent" "  ") | safeJS }}</script>
 {{ end }}
