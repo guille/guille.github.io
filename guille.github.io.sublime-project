@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"LSP": {
+			"LSP-html": {
+				"disabled_capabilities": {
+					// Avoids messing up the Go templates
+					"documentFormattingProvider": true,
+					"documentRangeFormattingProvider": true
+				}
+			}
+		}
+	}
+}

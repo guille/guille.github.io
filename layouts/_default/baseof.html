@@ -15,7 +15,7 @@
   {{/* Conditional asset loading: only include JS/CSS for features used on this page */}}
   {{ if .Scratch.Get "needsToc" }}
   {{ $tocJS := resources.Get "js/toc.js" | minify }}
-  <script>{ { $tocJS.Content | safeJS } }</script>
+  <script>{{ $tocJS.Content | safeJS }}</script>
   {{ end }}
   {{ if .Scratch.Get "needsMermaid" }}
   <script type="module">
