@@ -222,24 +222,6 @@ a.external-link::after {
   -webkit-mask-repeat: no-repeat;
 }
 
-@media (max-width: 30rem) {
-  h1 {
-    font-size: 1.6rem;
-  }
-
-  h2 {
-    font-size: 1.3rem;
-  }
-
-  .post-header h1 {
-    font-size: 1.75rem;
-  }
-
-  .site-nav a {
-    padding: 0.5rem 0.5rem;
-  }
-}
-
 /* ===== Code ===== */
 code {
   font-family: var(--font-mono);
@@ -335,6 +317,39 @@ pre code {
   color: var(--color-text);
   border-block-end: 2px solid var(--color-accent);
   padding-block-end: calc(0.5rem - 2px);
+}
+
+/* Hamburger toggle: hidden on wide screens, revealed in the small-screen
+   media query. CSS-only via the checkbox hack (see .sidenote-checkbox). */
+.nav-toggle,
+.nav-toggle-checkbox {
+  display: none;
+}
+
+.nav-toggle {
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease;
+}
+
+.nav-toggle:hover {
+  color: var(--color-text);
+}
+
+.nav-toggle svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.nav-toggle .nav-icon-open {
+  display: block;
+}
+
+.nav-toggle .nav-icon-close {
+  display: none;
 }
 
 /* ===== Footer ===== */
@@ -990,5 +1005,91 @@ pre code {
 @media (max-width: 80rem) {
   .toc {
     display: none;
+  }
+}
+
+/* ===== Small screens =====
+   Placed after the base rules so these overrides win on source order
+   (media queries don't add specificity). */
+@media (max-width: 30rem) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  .post-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .site-header {
+    padding-block: calc(var(--spacing) * 0.75);
+    position: relative;
+  }
+
+  main {
+    padding-block: calc(var(--spacing) * 0.5);
+  }
+
+  /* Collapse the nav behind a hamburger pinned to the top-right, so a long
+     site title can't push it onto a second line. */
+  .nav-toggle {
+    display: inline-flex;
+    position: absolute;
+    top: calc(var(--spacing) * 0.75);
+    inset-inline-end: var(--spacing);
+  }
+
+  /* Keep the checkbox reachable by keyboard while hiding it visually. */
+  .nav-toggle-checkbox {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .nav-toggle-checkbox:focus-visible + .nav-toggle {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+  }
+
+  .nav-toggle-checkbox:checked ~ .nav-toggle .nav-icon-open {
+    display: none;
+  }
+
+  .nav-toggle-checkbox:checked ~ .nav-toggle .nav-icon-close {
+    display: block;
+  }
+
+  .site-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    inset-inline-end: var(--spacing);
+    z-index: 20;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 9rem;
+    margin-block-start: 0.5rem;
+    padding: 0.5rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .nav-toggle-checkbox:checked ~ nav .site-nav {
+    display: flex;
+  }
+
+  .site-nav a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
   }
 }
